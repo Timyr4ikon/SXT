@@ -1,87 +1,43 @@
 import React from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  ImageBackground,
-  View,
-  Image,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from "react-native";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import startScreen from "./screens/startScreen";
+import playScreen from "./screens/playScreen";
+import choiceScreen from "./screens/choiceScreen";
 
-import { AppLoading } from "expo";
-import { useFonts, Bevan_400Regular } from "@expo-google-fonts/bevan";
+const AuthStack = createStackNavigator();
 
-const screen = Dimensions.get("screen");
-
-export default () => {
-  let [fontsLoaded, error] = useFonts({
-    Bevan: Bevan_400Regular,
-  });
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
+export default function App() {
   return (
-    <ImageBackground
-      source={require("./images/background.png")}
-      style={styles.backImage}
-    >
-      <ScrollView>
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.bntPlay}>
-            <Image
-              source={require("./images/kk.png")}
-              style={styles.btnPlayImg}
-            />
-            <Text style={styles.btnPlayText}>Play</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bntPlay}>
-            <Image
-              source={require("./images/kk.png")}
-              style={styles.btnPlayImg}
-            />
-            {/* <Text style={styles.btnPlayText}></Text> */}
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </ImageBackground>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AuthStack.Navigator>
+          <AuthStack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Start"
+            component={startScreen}
+          />
+          <AuthStack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Choice"
+            component={choiceScreen}
+          />
+          <AuthStack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Play"
+            component={playScreen}
+          />
+         
+        </AuthStack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    height: screen.height,
-  },
-  backImage: {
-    flex: 1,
-    resizeMode: "cover",
-  },
-  bntPlay: {
-    borderWidth: 1,
-    borderColor: "red",
-    width: "70%",
-    alignItems: "center",
-    maxWidth: 300,
-    position: "relative",
-  },
-  btnPlayImg: {
-    width: "100%",
-    height: 75,
-    resizeMode: "stretch",
-  },
-  btnPlayText: {
-    position: "absolute",
-    color: "#ffffff",
-    fontSize: 33,
-    lineHeight: 75,
-    textTransform: "uppercase",
-    fontFamily: "Bevan",
-  },
-});
+}
